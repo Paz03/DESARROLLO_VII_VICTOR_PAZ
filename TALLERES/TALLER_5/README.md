@@ -1,0 +1,3 @@
+La clase Estudiante se utiliza para almacenar el ID, el nombre, la edad, la carrera y una colección de materias con calificaciones, y posee funciones para agregar materias, calcular el promedio y obtener la información. la clase SistemaGestionEstudiantes ofrece funciones para agregar, buscar y listar estudiantes, calcular promedios generales y buscar el mejor y, también, obtener estadísticas.
+
+El ejemplo de uso sigue la creación del estudiante, asigna materias y sus calificaciones, y luego se listan todos los estudiantes, se calcula el promedio y se extiende estadísticas comparándose las carreras aparte se muestra los estudiantes que fracasaron y que necesitan mejorar.
