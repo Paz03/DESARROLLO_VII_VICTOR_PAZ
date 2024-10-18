@@ -47,4 +47,9 @@ function validarFotoPerfil($archivo) {
 
     return true;
 }
+
+function validarFechanacimiento($fecha) {
+    $fechaValida = DateTime::createFromFormat('Y-m-d', $fecha);
+    return $fechaValida && $fechaValida->format('Y-m-d') === $fecha;
+}
 ?>
