@@ -1,6 +1,13 @@
 <?php
-// Crear una cookie que expira en 1 hora
-setcookie("usuario", "Victor", time() + 3600, "/");
+// Configurar una cookie segura
+setcookie("usuario", "Victor", [
+    'expires' => time() + 3600,
+    'path' => '/',
+    'domain' => '',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
 
-echo "Cookie 'usuario' creada.";
+echo "Cookie segura 'usuario' creada.";
 ?>

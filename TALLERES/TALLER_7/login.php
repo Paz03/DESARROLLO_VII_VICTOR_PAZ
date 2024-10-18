@@ -1,19 +1,27 @@
 <?php
-session_start();
 
-// Si ya hay una sesión activa, redirigir al panel
-if(isset($_SESSION['usuario'])) {
-    header("Location: panel.php");
-    exit();
-}
+// Incluir el archivo de configuración para la sesión
+include 'config_sesion.php';
 
-// Procesar el formulario cuando se envía
+// Verificar si el formulario fue enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Verificar el token CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Error de validación CSRF");
+    }
+
+    // Si ya hay una sesión activa, redirigir al panel
+    if (isset($_SESSION['usuario'])) {
+        header("Location: panel.php");
+        exit();
+    }
+
+    // Procesar el formulario
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['contrasena'];
 
     // En un caso real, verificaríamos contra una base de datos
-    if($usuario === "admin" && $contrasena === "1234") {
+    if ($usuario === "admin" && $contrasena === "1234") {
         $_SESSION['usuario'] = $usuario;
         header("Location: panel.php");
         exit();
@@ -21,6 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Usuario o contraseña incorrectos";
     }
 }
+
+// Generar token CSRF
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <h2>Login</h2>
     <?php
+    // Mostrar mensaje de error si existe
     if (isset($error)) {
         echo "<p style='color: red;'>$error</p>";
     }
@@ -41,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="text" id="usuario" name="usuario" required><br><br>
         <label for="contrasena">Contraseña:</label><br>
         <input type="password" id="contrasena" name="contrasena" required><br><br>
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         <input type="submit" value="Iniciar Sesión">
     </form>
 </body>
