@@ -106,21 +106,19 @@ if ($result) {
 }
 
 // 6. Porcentaje de ventas de cada producto respecto al total de ventas
+
 $sql = "SELECT p.nombre, 
         (SUM(dv.cantidad) / (SELECT SUM(cantidad) FROM detalles_venta) * 100) AS porcentaje_ventas 
         FROM productos p 
         JOIN detalles_venta dv ON p.id = dv.producto_id 
         GROUP BY p.id";
 
-try {
-    $stmt = $pdo->query($sql);
+$result = mysqli_query($conn, $sql);
 
-    echo "<h3>Porcentaje de ventas de cada producto respecto al total de ventas:</h3>";
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+echo "<h3>Porcentaje de ventas de cada producto respecto al total de ventas:</h3>";
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
         echo "Producto: {$row['nombre']}, Porcentaje de ventas: {$row['porcentaje_ventas']}%<br>";
     }
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
+    mysqli_free_result($result);
 }
-
-$pdo = null;
